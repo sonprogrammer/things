@@ -1,6 +1,7 @@
 export interface TodoCategory {
     title: string;
     items: string[];
+    isAddBtn? : boolean
   }
 
 export const mock: TodoCategory[] = [

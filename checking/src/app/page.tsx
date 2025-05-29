@@ -1,18 +1,30 @@
 'use client'
-// import DeleteIcon from '@mui/icons-material/Delete';
+import AddModal from "@/components/AddModal";
 import PerPageBtn from "@/components/PerPageBtn";
 import { mock } from "@/lib/mockData";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 
 
 
 export default function Home() {
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
+
+  const dataWithAddBtn = [...mock, {title: 'Add to cart', isAddBtn: true}]
+
+  const handleOutsideClick = () => {
+    setOpenModal(false)
+  }
+
+  const handleAddClick = () => {
+    setOpenModal(true)
+  }
   
-  const clickPage = () => {
-    router.push('/page')
+  const clickPage = (title: string) => {
+    router.push(`/page?title=${encodeURIComponent(title)}`)
   }
   
   return (
@@ -40,12 +52,18 @@ export default function Home() {
         </motion.h1>
       </motion.div>
 
-      <div className="grid grid-cols-3 gap-5 text-center mt-10">
-        {mock.map((item, i) => (
-          <PerPageBtn title={item.title} key={i} onClick={clickPage}/>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1  gap-5 text-center mt-10">
+        {dataWithAddBtn.map((item, i) => (
+          <PerPageBtn title={item.title} 
+            key={i} 
+            onClick={() => 
+              item.isAddBtn ? handleAddClick() : clickPage(item.title)
+            }/>
         ))}
-        
       </div>
+      {openModal && <AddModal outsideClick={handleOutsideClick}/>}
+
+      
     </div>
   );
 }
