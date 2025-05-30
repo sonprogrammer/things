@@ -6,7 +6,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
-import { Button, TextareaAutosize } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddTodo from '@/components/AddTodo';
 
 
 const PerPage = () => {
@@ -15,7 +17,7 @@ const PerPage = () => {
   const params = useSearchParams()
   const title = params.get('title')
 
-  const objects = mock.filter(item => item.title === title)
+  const objects = mock.filter(item => item.title === title)[0]
   console.log('cha', checkedItems)
 
   const handleChange = (item: string) => {
@@ -24,15 +26,17 @@ const PerPage = () => {
     )
   }
 
-  const handleAddClick =() => {
-    setAddItem(true)
-  }
+ 
 
   return (
     <div className='relative h-full'>
-      <div className='font-bold text-2xl p-3'>{title}</div>
-      <div className='p-5 border-t-2 grid md:grid-cols-2 grid-cols-1 gap-5'>
-        
+      <div className='flex items-center justify-between border-b-2'>
+        <div className='font-bold text-2xl p-3'>{title}</div>
+        <Button variant="contained" sx={{ marginRight: '12px', borderRadius: '24px' }}>Save</Button>
+      </div>
+      <AddTodo />
+      <div className='p-5 grid md:grid-cols-2 grid-cols-1 gap-5'>
+
         <div className='todo'>
 
           <div className='flex items-center justify-center relative border-b-[1px] pb-2 '>
@@ -40,14 +44,12 @@ const PerPage = () => {
             <h1 className='mx-auto mb-2 font-semibold text-xl px-3 border-2 rounded-full bg-purple-300'>
               Todo
             </h1>
-            <Button variant="contained" sx={{position:'absolute', right:'10px'}} onClick={handleAddClick}>
-              Add
-            </Button>
+            
 
           </div>
 
-          <FormGroup>
-            {objects[0].items.map((a, i) => (
+          <FormGroup className='input'>
+            {objects.items.filter(a => !checkedItems.includes(a)).map((a, i) => (
               <FormControlLabel key={i}
                 control={<Checkbox
                   checked={checkedItems.includes(a)}
@@ -55,20 +57,6 @@ const PerPage = () => {
                 />}
                 label={a} />
             ))}
-            {addItem && 
-              <form
-              onSubmit={(event) => {
-                event.preventDefault();
-              }}
-            >
-              <TextareaAutosize
-                placeholder="Try to submit with no text!"
-                required
-                sx={{ mb: 1 }}
-              />
-              <Button type="submit">Submit</Button>
-            </form>
-            }
           </FormGroup>
         </div>
 
@@ -79,9 +67,14 @@ const PerPage = () => {
           </div>
           <div>
             {checkedItems.map((a, i) => (
-              <div className='flex items-center' key={i}>
-                <Checkbox disabled checked />
-                <p>{a}</p>
+              <div className='flex items-center justify-between' key={i}>
+                <div className='flex items-center'>
+                  <Checkbox disabled checked />
+                  <p>{a}</p>
+                </div>
+                <IconButton aria-label="delete">
+                  <DeleteIcon sx={{ color: 'red' }} />
+                </IconButton>
               </div>
             ))}
 
