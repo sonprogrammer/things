@@ -5,27 +5,49 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { ReactEventHandler, useEffect, useState } from 'react'
 import { Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddTodo from '@/components/AddTodo';
 
+interface Todos  {
+  item: string;
+  done: boolean
+}
+
 
 const PerPage = () => {
-  const [checkedItems, setCheckedItems] = useState<string[]>([])
+  const [todos, setTodos] = useState<Todos[]>([])
   const [addItem, setAddItem] = useState<boolean>(false)
   const params = useSearchParams()
   const title = params.get('title')
 
-  const objects = mock.filter(item => item.title === title)[0]
-  console.log('cha', checkedItems)
+  
+  
+  useEffect(() => {
+    const titles = mock.find(a => a.title === title)
+    if(titles){
+      const todoItems = titles.items.map((item: string) => ({
+        item: item,
+        done: false
+      }))
+      setTodos(todoItems)
+    }
+  },[title])
 
-  const handleChange = (item: string) => {
-    setCheckedItems(prev =>
-      prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
-    )
+  console.log('todos', todos)
+
+
+  const toggleTodo = (item: string) => {
+    setTodos(prev => prev.map((todo) => 
+      todo.item === item ? {...todo, done: !todo.done} : todo
+  ))
   }
 
+  const handleDelete = (item: string, e:React.MouseEvent<HTMLButtonElement>) => {
+    setTodos(prev => prev.filter(a => a.item !== item))
+    e.stopPropagation()
+  }
  
 
   return (
@@ -49,13 +71,14 @@ const PerPage = () => {
           </div>
 
           <FormGroup className='input'>
-            {objects.items.filter(a => !checkedItems.includes(a)).map((a, i) => (
+            {todos?.filter(a => !a.done ).map((a, i) => (
               <FormControlLabel key={i}
                 control={<Checkbox
-                  checked={checkedItems.includes(a)}
-                  onChange={() => handleChange(a)}
+                  checked={!todos.includes(a)}
+                  onChange={() => toggleTodo(a.item)}
                 />}
-                label={a} />
+                label={a.item} 
+                />
             ))}
           </FormGroup>
         </div>
@@ -66,13 +89,13 @@ const PerPage = () => {
 
           </div>
           <div>
-            {checkedItems.map((a, i) => (
-              <div className='flex items-center justify-between' key={i}>
-                <div className='flex items-center'>
-                  <Checkbox disabled checked />
-                  <p>{a}</p>
+            {todos.filter(a => a.done).map((a, i) => (
+              <div className='flex items-center justify-between cursor-pointer' key={i}  >
+                <div className='flex items-center' onClick={()=>toggleTodo(a.item)}>
+                  <Checkbox checked />
+                  <p>{a.item}</p>
                 </div>
-                <IconButton aria-label="delete">
+                <IconButton aria-label="delete"  onClick={(e)=>handleDelete(a.item, e)}>
                   <DeleteIcon sx={{ color: 'red' }} />
                 </IconButton>
               </div>
@@ -87,3 +110,4 @@ const PerPage = () => {
 }
 
 export default PerPage
+
