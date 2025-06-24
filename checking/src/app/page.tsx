@@ -1,7 +1,7 @@
 'use client'
 import LoginModal from "@/components/LoginModal";
-import axios from "axios";
-import { useEffect } from "react";
+// import axios from "axios";
+// import { useEffect } from "react";
 
 
 
@@ -13,17 +13,17 @@ export default function Home() {
 
 
   // TODO api test
-  useEffect(() => {
-    const fetchData = async() => {
-      try {
-        const res = await axios.get('api/getAllUser')
-        console.log('res', res.data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchData()
-  },[])
+  // useEffect(() => {
+  //   const fetchData = async() => {
+  //     try {
+  //       const res = await axios.get('api/getAllUser')
+  //       console.log('res', res.data)
+  //     } catch (error) {
+  //       console.error(error)
+  //     }
+  //   }
+  //   fetchData()
+  // },[])
 
   
   

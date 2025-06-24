@@ -1,27 +1,27 @@
-// lib/mongodb.js
-import { MongoClient } from "mongodb";
+// lib/mongodb.js (mongoose 버전)
+import mongoose from 'mongoose';
 
-const uri = process.env.MONGODB_URI;
-const options = {};
+const MONGODB_URI = process.env.MONGODB_URI;
 
-let client;
-let clientPromise;
-
-if (!process.env.MONGODB_URI) {
-  throw new Error("MONGODB_URI 환경 변수가 설정되지 않았습니다.");
+if (!MONGODB_URI) {
+  throw new Error('MONGODB_URI 환경 변수가 필요합니다.');
 }
 
-if (process.env.NODE_ENV === "development") {
-  // 개발 환경에서는 전역 변수에 클라이언트를 캐싱하여 hot reload 문제 방지
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function mongodb() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
   }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // 프로덕션에서는 글로벌 캐싱 필요 없음
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
-export default clientPromise;
+export default mongodb;

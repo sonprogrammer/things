@@ -15,7 +15,7 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
 
-  const user = localStorage.getItem('user')
+  // const user = localStorage.getItem('user')
 
   const dataWithAddBtn = [...mock, {title: 'Add to cart', isAddBtn: true}]
 
@@ -23,8 +23,8 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async() => {
       try {
-        const res = await axios.get('api/getAllUser')
-        console.log('res', res.data)
+        // const res = await axios.get('api/getAllUser')
+        // console.log('res', res.data)
       } catch (error) {
         console.error(error)
       }
