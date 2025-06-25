@@ -44,13 +44,13 @@ export default function Home() {
     router.push(`/page?title=${encodeURIComponent(title)}`)
   }
   
-  if(!user){
-    return(
-      <div className="absolute w-full border  bg-black/70 flex items-center justify-center">
-        <LoginModal />
-      </div>
-    )
-  }
+  // if(!user){
+  //   return(
+  //     <div className="absolute w-full border  bg-black/70 flex items-center justify-center">
+  //       <LoginModal />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="p-10">

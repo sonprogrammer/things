@@ -5,6 +5,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import debounce from 'lodash/debounce';
+import { useValidation } from '@/hooks/useValidation';
+import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/app/stores/useUserData';
 
 
 
@@ -14,12 +17,37 @@ const LoginModal = () => {
   const [gotoRegister, setGotoRegister] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [isAvailable, setIsAvailable] = useState<null | boolean>(null)
+  const { isLoading, data, refetch } = useValidation(nickName)
+  const {userData} = useUserStore()
 
+  const router = useRouter()
+
+  const handleLoginClick = async() => {
+    if(!nickName.trim()){
+      alert('닉네임을 입력하세요')
+      return
+    }
+    const res = await refetch()
+    const exist = res.data.exist
+    console.log('exist', res)
+    if(exist){
+      localStorage.setItem('user', JSON.stringify(res.data.user))
+
+    }
+    
+    if(!exist){
+      alert('존재하지 않는 닉네임입니다')
+      return
+    }
+    router.push('/home')
+
+    
+  }
 
   const handleGoToRegisterClick = () => {
     setGotoRegister(true)
+    setNickName('')
   }
-  // console.log('gotoRegister',gotoRegister)
 
   const checkName = async(nickName: string) => {
     if(!nickName.trim()){
@@ -84,7 +112,7 @@ const LoginModal = () => {
         {gotoRegister &&
           <ArrowBackIcon
             className='absolute left-3 hover:bg-amber-700/70 cursor-pointer rounded-full w-10 text-2xl'
-            onClick={() => setGotoRegister(false)}
+            onClick={() => {setGotoRegister(false); setNickName('')}}
           />
 
         }
@@ -129,7 +157,7 @@ const LoginModal = () => {
           </>
         )
           : (
-            <Button variant="contained" color='warning' href="/home" className='h-1/2'>
+            <Button variant="contained" color='warning' onClick={handleLoginClick} className='h-1/2'>
               Go In
             </Button>
           )
