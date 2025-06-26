@@ -1,5 +1,6 @@
+import usePostTitle from '@/hooks/usePostTitle'
 import { Button, TextField } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 
 
 interface AddModalProps{
@@ -7,6 +8,17 @@ interface AddModalProps{
 }
 
 const AddModal = ({outsideClick}: AddModalProps) => {
+    const [title, setTitle] = useState<string>('')
+
+    const { mutate } = usePostTitle();
+
+    const handleSubmitClick = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        mutate(title)
+        setTitle('')
+        console.log('clicked')
+    }
+
   return (
     <div className='fixed top-0 bg-black/60 flex justify-center items-center
                     inset-0'
@@ -19,11 +31,17 @@ const AddModal = ({outsideClick}: AddModalProps) => {
                           flex items-center justify-center cursor-pointer hover:text-white '
                onClick={outsideClick}
             >X</p>
+
             <h1 className='text-center text-xl font-bold'>name of the title</h1>
-            <TextField id="standard-basic" label="Title" variant="standard" /> 
+            
+            <TextField id="standard-basic" label="Title" variant="standard" onChange={e => setTitle(e.target.value)} /> 
+            
             <Button variant="contained" 
-            sx={{backgroundColor:'orange', "&:hover":{backgroundColor:'gray'}}}
-            >Submit</Button>
+                sx={{backgroundColor:'orange', "&:hover":{backgroundColor:'gray'}}}
+                onClick={handleSubmitClick}
+                >
+                Submit
+            </Button>
 
         </div>
     </div>

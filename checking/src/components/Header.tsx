@@ -14,14 +14,15 @@ const Header = () => {
   const { userData, setUserData} = useUserStore()
   const router = useRouter()
 
-
-
+  
   const handleLogoutClick = () =>{
     localStorage.removeItem('user')
+    localStorage.removeItem('token')
     setUserData(null)
     router.push('/')
   }
   
+  console.log('userdata', userData)
   return (
     // TODO 배경색 바꾸기
     <div className='bg-gradient-to-tl from-blue-950 to-blue-300 py-5 flex items-center justify-center'>

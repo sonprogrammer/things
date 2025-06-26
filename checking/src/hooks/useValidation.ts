@@ -7,13 +7,16 @@ import { useEffect } from "react";
 
 export const useValidation = (nickName: string) => {
 
-    const { userData, setUserData } = useUserStore()
+
 
     const login = async() => {
         if(!nickName.trim()){
             return null
         }
         const res = await axios.post('api/postLoginUser', {nickName})
+        if(res.data.token){
+            localStorage.setItem('token', res.data.token)
+        }
         return res.data
     }
     
@@ -22,11 +25,7 @@ export const useValidation = (nickName: string) => {
         queryFn: login,
         enabled: false
     })
-    
-    useEffect(() => {
-        if(data?.exist){
-            setUserData(data.user)
-        }
-    },[data, userData])
+
+
     return { isLoading, data, refetch}
 }

@@ -1,6 +1,7 @@
 import mongodb from "@/lib/mongodb";
 import User from "../../../lib/models/User";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken'
 
 export async function POST(req) {
   await mongodb();
@@ -17,9 +18,15 @@ export async function POST(req) {
       );
     }
 
+    const token = jwt.sign(
+      {id: user._id, nickName: user.nickName},
+      process.env.JWT_SECRET,
+      {expiresIn: '1h'}
+    )
+
 
     return NextResponse.json(
-      { message: "here you are", user, exist: true },
+      { message: "here you are", user,token, exist: true },
       { status: 200 }
     );
   } catch (error) {

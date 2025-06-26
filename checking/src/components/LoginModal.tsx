@@ -18,7 +18,7 @@ const LoginModal = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isAvailable, setIsAvailable] = useState<null | boolean>(null)
   const { isLoading, data, refetch } = useValidation(nickName)
-  const {userData} = useUserStore()
+  const {setUserData} = useUserStore()
 
   const router = useRouter()
 
@@ -30,9 +30,10 @@ const LoginModal = () => {
     const res = await refetch()
     const exist = res.data.exist
     console.log('exist', res)
+
     if(exist){
       localStorage.setItem('user', JSON.stringify(res.data.user))
-
+      setUserData(res.data.user)
     }
     
     if(!exist){
@@ -40,9 +41,8 @@ const LoginModal = () => {
       return
     }
     router.push('/home')
-
-    
   }
+
 
   const handleGoToRegisterClick = () => {
     setGotoRegister(true)

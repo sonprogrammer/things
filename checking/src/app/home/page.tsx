@@ -1,9 +1,7 @@
 'use client'
 import AddModal from "@/components/AddModal";
-import LoginModal from "@/components/LoginModal";
 import PerPageBtn from "@/components/PerPageBtn";
 import { mock } from "@/lib/mockData";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,7 +13,7 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
 
-  // const user = localStorage.getItem('user')
+
 
   const dataWithAddBtn = [...mock, {title: 'Add to cart', isAddBtn: true}]
 
