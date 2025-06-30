@@ -25,7 +25,5 @@ const TodoSchema = new mongoose.Schema({
 })
 
 
-// const User = mongoose.models.User || mongoose.model('User', UserSchema)
-
 const Todo = mongoose.models.Todo || mongoose.model('Todo', TodoSchema)
 export default Todo

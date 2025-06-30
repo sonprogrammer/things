@@ -7,7 +7,7 @@ export async function POST(req) {
   await mongodb();
 
   const {nickName} = await req.json();
-  console.log('n', nickName)
+
   try {
     const user = await User.findOne({ id:nickName });
 

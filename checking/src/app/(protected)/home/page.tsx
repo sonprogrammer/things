@@ -1,6 +1,7 @@
 'use client'
 import AddModal from "@/components/AddModal";
 import PerPageBtn from "@/components/PerPageBtn";
+import useGetTodoTitle from "@/hooks/useGetTodoTitle";
 import { mock } from "@/lib/mockData";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -13,9 +14,14 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
 
+  const {data} = useGetTodoTitle()
+  console.log('data', data)
+
+  const titles = data?.todoTitles|| []
+  console.log('titles', titles)
 
 
-  const dataWithAddBtn = [...mock, {title: 'Add to cart', isAddBtn: true}]
+  const dataWithAddBtn = [...titles, {title: 'Add to cart', isAddBtn: true}]
 
   // TODO api test
   useEffect(() => {
