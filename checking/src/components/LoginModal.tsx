@@ -29,7 +29,7 @@ const LoginModal = () => {
     }
     const res = await refetch()
     const exist = res.data.exist
-    console.log('exist', res)
+
 
     if(exist){
       localStorage.setItem('user', JSON.stringify(res.data.user))

@@ -2,10 +2,10 @@
 import AddModal from "@/components/AddModal";
 import PerPageBtn from "@/components/PerPageBtn";
 import useGetTodoTitle from "@/hooks/useGetTodoTitle";
-import { mock } from "@/lib/mockData";
+// import { mock } from "@/lib/mockData";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 
 
@@ -15,26 +15,12 @@ export default function Home() {
   const router = useRouter()
 
   const {data} = useGetTodoTitle()
-  console.log('data', data)
 
   const titles = data?.todoTitles|| []
-  console.log('titles', titles)
-
 
   const dataWithAddBtn = [...titles, {title: 'Add to cart', isAddBtn: true}]
 
-  // TODO api test
-  useEffect(() => {
-    const fetchData = async() => {
-      try {
-        // const res = await axios.get('api/getAllUser')
-        // console.log('res', res.data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchData()
-  },[])
+  
 
   const handleOutsideClick = () => {
     setOpenModal(false)
@@ -48,14 +34,6 @@ export default function Home() {
     router.push(`/page?title=${encodeURIComponent(title)}`)
   }
   
-  // if(!user){
-  //   return(
-  //     <div className="absolute w-full border  bg-black/70 flex items-center justify-center">
-  //       <LoginModal />
-  //     </div>
-  //   )
-  // }
-
   return (
     <div className="p-10">
 

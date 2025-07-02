@@ -2,7 +2,7 @@ import mongodb from "@/lib/mongodb";
 import Todo from "../../../lib/models/Todo";
 import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
-import mongoose from "mongoose";
+
 
 export async function GET(req) {
   await mongodb();
@@ -20,14 +20,11 @@ export async function GET(req) {
 
     const secret = process.env.JWT_SECRET;
     const decoded = jwt.verify(token, secret);
-    console.log('secret', decoded)
 
     const userId = decoded.id;
-    console.log('userid', userId)
 
     const todoTitles = await Todo.find({ 
         userId });
-    console.log('todos', todoTitles)
 
     return NextResponse.json(
       { message: "success", todoTitles },

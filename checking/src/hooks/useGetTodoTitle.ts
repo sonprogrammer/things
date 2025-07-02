@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query"
 
 const getTitle = async () => {
     const res = await axiosInstance.get('api/getTodoTitle')
-    console.log('res', res.data)
     return res.data
 }
 

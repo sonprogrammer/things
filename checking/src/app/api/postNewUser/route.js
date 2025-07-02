@@ -9,7 +9,6 @@ export async function POST(req){
     
         try {
             const {nickName} = await req.json()
-            console.log('id', nickName)
           
             const existingUser = await User.findOne({id :nickName})
             if(existingUser){

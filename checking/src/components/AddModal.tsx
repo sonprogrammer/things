@@ -1,5 +1,6 @@
 import usePostTitle from '@/hooks/usePostTitle'
 import { Button, TextField } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 
@@ -10,13 +11,15 @@ interface AddModalProps{
 const AddModal = ({outsideClick}: AddModalProps) => {
     const [title, setTitle] = useState<string>('')
 
+    const router = useRouter()
+
     const { mutate } = usePostTitle();
 
     const handleSubmitClick = (e: React.MouseEvent) => {
         e.stopPropagation()
         mutate(title)
         setTitle('')
-        console.log('clicked')
+        router.push(`page?title=${title}`)
     }
 
   return (

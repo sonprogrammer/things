@@ -5,7 +5,6 @@ import axiosInstance from "@/lib/axiosInstance"
 
 const postTitle = async(title: string) => {
     const res = await axiosInstance.post('api/postTodoTitle',{title})
-    console.log('res', res.data)
     return res.data
 }
 

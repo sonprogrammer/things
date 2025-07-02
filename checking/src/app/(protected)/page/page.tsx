@@ -1,51 +1,64 @@
 'use client'
 
-import { mock } from '@/lib/mockData'
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useSearchParams } from 'next/navigation'
-import React, { ReactEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddTodo from '@/components/AddTodo';
+import useGetTodoList from '@/hooks/useGetTodoList';
+import usePostToggleList from '@/hooks/usePostToggleList';
+import usePostList from '@/hooks/usePostList';
+
 
 interface Todos  {
-  item: string;
+  text: string;
   done: boolean
 }
 
 
 const PerPage = () => {
   const [todos, setTodos] = useState<Todos[]>([])
-  const [addItem, setAddItem] = useState<boolean>(false)
+  const [content, setContent] = useState<string>('')
+
   const params = useSearchParams()
-  const title = params.get('title')
+  const title = params.get('title') ?? ''
 
-  
-  
+  const { data } = useGetTodoList(title)
+
+  const {mutate: toggleMutate} = usePostToggleList()
+  const {mutate} = usePostList()
+
+  const handleAddClick = () => {
+    mutate({title, content})
+    setContent('')
+  }
+
   useEffect(() => {
-    const titles = mock.find(a => a.title === title)
-    if(titles){
-      const todoItems = titles.items.map((item: string) => ({
-        item: item,
-        done: false
-      }))
-      setTodos(todoItems)
+    if(data && data.length >0){
+      setTodos(data[0]?.tasks)
     }
-  },[title])
+  },[data])
+  
 
-  console.log('todos', todos)
+  const handleAddTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value)
+
+  }
 
 
-  const toggleTodo = (item: string) => {
+
+  const toggleTodo = (text: string) => {
+    toggleMutate({title,content: text})
     setTodos(prev => prev.map((todo) => 
-      todo.item === item ? {...todo, done: !todo.done} : todo
+      todo.text === text ? {...todo, done: !todo.done} : todo
   ))
   }
 
-  const handleDelete = (item: string, e:React.MouseEvent<HTMLButtonElement>) => {
-    setTodos(prev => prev.filter(a => a.item !== item))
+  const handleDelete = (text: string, e:React.MouseEvent<HTMLButtonElement>) => {
+    setTodos(prev => prev.filter(a => a.text !== text))
     e.stopPropagation()
   }
  
@@ -56,7 +69,7 @@ const PerPage = () => {
         <div className='font-bold text-2xl p-3'>{title}</div>
         <Button variant="contained" sx={{ marginRight: '12px', borderRadius: '24px' }}>Save</Button>
       </div>
-      <AddTodo />
+      <AddTodo content={content} handleAddTodoChange={handleAddTodoChange} handleAddClick={handleAddClick}/>
       <div className='p-5 grid md:grid-cols-2 grid-cols-1 gap-5'>
 
         <div className='todo'>
@@ -75,9 +88,9 @@ const PerPage = () => {
               <FormControlLabel key={i}
                 control={<Checkbox
                   checked={!todos.includes(a)}
-                  onChange={() => toggleTodo(a.item)}
+                  onChange={() => toggleTodo(a.text)}
                 />}
-                label={a.item} 
+                label={a.text} 
                 />
             ))}
           </FormGroup>
@@ -89,13 +102,13 @@ const PerPage = () => {
 
           </div>
           <div>
-            {todos.filter(a => a.done).map((a, i) => (
+            {todos?.filter(a => a.done).map((a, i) => (
               <div className='flex items-center justify-between cursor-pointer' key={i}  >
-                <div className='flex items-center' onClick={()=>toggleTodo(a.item)}>
+                <div className='flex items-center' onClick={()=>toggleTodo(a.text)}>
                   <Checkbox checked />
-                  <p>{a.item}</p>
+                  <p className='line-through text-gray-500'>{a.text}</p>
                 </div>
-                <IconButton aria-label="delete"  onClick={(e)=>handleDelete(a.item, e)}>
+                <IconButton aria-label="delete"  onClick={(e)=>handleDelete(a.text, e)}>
                   <DeleteIcon sx={{ color: 'red' }} />
                 </IconButton>
               </div>
