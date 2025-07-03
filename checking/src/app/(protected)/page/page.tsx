@@ -5,17 +5,20 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { Button, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddTodo from '@/components/AddTodo';
 import useGetTodoList from '@/hooks/useGetTodoList';
 import usePostToggleList from '@/hooks/usePostToggleList';
 import usePostList from '@/hooks/usePostList';
+import useDeleteLists from '@/hooks/useDeleteLists';
 
 
 interface Todos  {
-  text: string;
+  _id: string
+  text: string
   done: boolean
+  isDeleted?: boolean
 }
 
 
@@ -27,6 +30,7 @@ const PerPage = () => {
   const title = params.get('title') ?? ''
 
   const { data } = useGetTodoList(title)
+  const { mutate: deleteMutate} = useDeleteLists()
 
   const {mutate: toggleMutate} = usePostToggleList()
   const {mutate} = usePostList()
@@ -38,7 +42,8 @@ const PerPage = () => {
 
   useEffect(() => {
     if(data && data.length >0){
-      setTodos(data[0]?.tasks)
+      const tasks: Todos[] = data[0]?.tasks.filter((t: Todos) => !t.isDeleted)
+      setTodos(tasks)
     }
   },[data])
   
@@ -58,16 +63,17 @@ const PerPage = () => {
   }
 
   const handleDelete = (text: string, e:React.MouseEvent<HTMLButtonElement>) => {
-    setTodos(prev => prev.filter(a => a.text !== text))
+    // setTodos(prev => prev.filter(a => a.text !== text))
+    deleteMutate({title, content: text})
     e.stopPropagation()
   }
- 
+//  hkjhkj
 
   return (
     <div className='relative h-full'>
-      <div className='flex items-center justify-between border-b-2'>
+      <div className='flex items-center justify-center border-b-2'>
         <div className='font-bold text-2xl p-3'>{title}</div>
-        <Button variant="contained" sx={{ marginRight: '12px', borderRadius: '24px' }}>Save</Button>
+        {/* <Button variant="contained" sx={{ marginRight: '12px', borderRadius: '24px' }}>Save</Button> */}
       </div>
       <AddTodo content={content} handleAddTodoChange={handleAddTodoChange} handleAddClick={handleAddClick}/>
       <div className='p-5 grid md:grid-cols-2 grid-cols-1 gap-5'>

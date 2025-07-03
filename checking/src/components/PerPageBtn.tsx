@@ -5,19 +5,34 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import {motion} from 'framer-motion'
 
 import React from 'react'
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 const MotionIconButton = motion(IconButton);
+
 
 interface PerPageProps{
   title: string
   onClick?: () => void
+  edit: boolean
+  handleDeleteClick: (title: string) => void
 }
 
-const PerPageBtn = ({title, onClick}: PerPageProps) => {
+const PerPageBtn = ({title, onClick,edit, handleDeleteClick}: PerPageProps) => {
   return (
-    <div className='hi'>
+    <div className='hi relative'>
+
+    {edit && title !== 'Add to cart' && ( 
+      <IconButton onClick={(e) => {
+        e.stopPropagation()
+        handleDeleteClick(title)
+      }}
+        className='!absolute top-[-18] left-[-18] z-1'
+      >
+        <RemoveCircleIcon className="text-red-500  hover:text-red-700  cursor-pointer" />
+      </IconButton>
+    )}
       <MotionIconButton
-          whileHover={{scale: 1.1}}
+          // whileHover={{scale: 1.1}}
           whileTap={{scale: 0.5}}
           transition={{type:'spring', stiffness: 300}}
           onClick={onClick}
@@ -25,6 +40,9 @@ const PerPageBtn = ({title, onClick}: PerPageProps) => {
           className=" !border-4 border-blue-300 hover:!bg-blue-200/70 !rounded-md !p-3 w-[270px] md:!w-[230px] lg:!w-[320px] !py-7"
 
       >
+        
+      
+        
         { title !== 'Add to cart' ?
           <p className='ml-2'>{title}</p>
           :

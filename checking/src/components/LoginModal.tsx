@@ -17,7 +17,7 @@ const LoginModal = () => {
   const [gotoRegister, setGotoRegister] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [isAvailable, setIsAvailable] = useState<null | boolean>(null)
-  const { isLoading, data, refetch } = useValidation(nickName)
+  const { refetch } = useValidation(nickName)
   const {setUserData} = useUserStore()
 
   const router = useRouter()

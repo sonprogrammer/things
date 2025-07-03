@@ -23,11 +23,11 @@ const AddModal = ({outsideClick}: AddModalProps) => {
     }
 
   return (
-    <div className='fixed top-0 bg-black/60 flex justify-center items-center
+    <div className='fixed top-0 bg-black/60 flex justify-center items-center z-10
                     inset-0'
         onClick={outsideClick}            
     >
-        <div className='relative bg-white w-[30%] p-6 rounded-xl flex flex-col gap-2'
+        <div className='relative bg-white w-[30%] p-6 rounded-xl flex flex-col gap-2 z-10'
             onClick={e => e.stopPropagation()}
         >
             <p className='absolute right-6 hover:bg-gray-700 w-5 h-5 rounded-full p-3

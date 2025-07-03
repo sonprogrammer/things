@@ -7,6 +7,10 @@ const TaskSchema = new mongoose.Schema({
     done: {
         type: Boolean,
         default: false
+    },
+    isDeleted:{
+        type: Boolean,
+        default: false
     }
 })
 
@@ -18,6 +22,10 @@ const TodoSchema = new mongoose.Schema({
     },
     title: {
         type: String,
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     },
     tasks: [TaskSchema]
 },{

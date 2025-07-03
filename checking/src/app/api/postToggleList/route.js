@@ -7,10 +7,8 @@ export async function POST(req){
 
     try {
         const { title, content} = await req.json()
-        console.log('title', title, content)
 
         const TodoTitle = await Todo.findOne({title})
-        // console.log('todo', TodoTitle)
 
         const todoTasks = TodoTitle.tasks
 
@@ -20,7 +18,6 @@ export async function POST(req){
             }
         })
         await TodoTitle.save()
-        console.log('todotask', todoTasks)
 
         return NextResponse.json({message: 'ok'} , {status: 200})
         
