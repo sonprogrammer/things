@@ -2,7 +2,7 @@ import Todo from "../../../lib/models/Todo";
 import mongodb from '@/lib/mongodb'
 import { NextResponse } from 'next/server'
 import User from '../../../lib/models/User'
-import jwt from 'jsonwebtoken';
+import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
 
 
 
@@ -11,17 +11,13 @@ export async function POST(req){
 
     try {
         const { title } = await req.json()
-        const authHeader = req.headers.get('authorization');
-        const token = authHeader?.split(' ')[1];
+        const userId = getUserFromReq(req)
 
-        if (!token) {
+        if (!userId) {
             return NextResponse.json({ message: 'No token provided' }, { status: 401 });
           }
         
-        const secret = process.env.JWT_SECRET
-        const decoded = jwt.verify(token, secret)
-
-        const userId = decoded.id
+        
 
         const user = await User.findOne({_id: userId})
 

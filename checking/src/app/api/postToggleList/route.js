@@ -1,15 +1,16 @@
 import mongodb from "@/lib/mongodb";
 import Todo from "../../../lib/models/Todo";
 import { NextResponse } from "next/server";
+import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
 
 export async function POST(req){
     await mongodb()
 
     try {
         const { title, content} = await req.json()
+        const userId = getUserFromReq(req)
 
-        const TodoTitle = await Todo.findOne({title})
-
+        const TodoTitle = await Todo.findOne({title, userId})
         const todoTasks = TodoTitle.tasks
 
         todoTasks.forEach(task => {

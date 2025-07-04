@@ -1,6 +1,7 @@
 import mongodb from "@/lib/mongodb";
 import Todo from "../../../lib/models/Todo";
 import { NextResponse } from "next/server";
+import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
 
 
 export async function POST(req){
@@ -8,8 +9,9 @@ export async function POST(req){
 
     try {
         const {title, content} = await req.json()
+        const userId = getUserFromReq(req)
 
-        const todoTitle = await Todo.findOne({title})
+        const todoTitle = await Todo.findOne({title,userId})
         
         todoTitle.tasks.push({text:content })
         await todoTitle.save()

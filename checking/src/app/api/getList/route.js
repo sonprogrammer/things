@@ -2,6 +2,7 @@ import mongodb from "@/lib/mongodb";
 import jwt from 'jsonwebtoken'
 import { NextResponse } from "next/server";
 import Todo from "../../../lib/models/Todo";
+import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
 
 
 
@@ -13,16 +14,13 @@ export async function GET(req){
         const { searchParams } = new URL(req.url);
 
         const title = searchParams.get("title");
-        const authHeader = req.headers.get("authorization");
-        const token = authHeader?.split(" ")[1];
+        const userId = getUserFromReq(req)
     
         if (!token) {
           return NextResponse.json({ message: "No token" }, { status: 401 });
         }
     
-        const secret = process.env.JWT_SECRET;
-        const decoded = jwt.verify(token, secret);
-        const userId = decoded.id;
+    
 
         if(!userId){
             return NextResponse.json({message:'there is no user'}, {status: 400})

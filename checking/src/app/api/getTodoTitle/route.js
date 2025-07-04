@@ -1,27 +1,21 @@
 import mongodb from "@/lib/mongodb";
 import Todo from "../../../lib/models/Todo";
 import { NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
+import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
 
 
 export async function GET(req) {
   await mongodb();
 
   try {
-    const authHeader = req.headers.get("authorization");
-    const token = authHeader?.split(" ")[1];
+    const userId = getUserFromReq(req)
 
-    if (!token) {
+    if (!userId) {
       return NextResponse.json(
-        { message: "No token provided" },
+        { message: "No user" },
         { status: 401 }
       );
     }
-
-    const secret = process.env.JWT_SECRET;
-    const decoded = jwt.verify(token, secret);
-
-    const userId = decoded.id;
 
     const todoTitles = await Todo.find({ 
         userId });
