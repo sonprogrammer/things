@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 
 
 
-const getTodoList = async(title: string) => {
-    const res = await axiosInstance.get(`/api/getList?title=${encodeURIComponent(title)}`);
+const getTodoList = async(titleId: string) => {
+    const res = await axiosInstance.get(`/api/getList?id=${encodeURIComponent(titleId)}`);
     return res.data.todoLists
 }
 

@@ -8,10 +8,10 @@ export async function POST(req){
     await mongodb()
 
     try {
-        const {title, content} = await req.json()
+        const {titleId, content} = await req.json()
         const userId = getUserFromReq(req)
 
-        const todoTitle = await Todo.findOne({title,userId})
+        const todoTitle = await Todo.findOne({_id:titleId,userId})
         
         todoTitle.tasks.push({text:content })
         await todoTitle.save()

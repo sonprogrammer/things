@@ -28,25 +28,26 @@ const PerPage = () => {
 
   const params = useSearchParams()
   const title = params.get('title') ?? ''
-
-  const { data } = useGetTodoList(title)
+  const titleId = params.get('id') ?? ''
+  
+  const { data } = useGetTodoList(titleId)
   const { mutate: deleteMutate} = useDeleteLists()
-
+  
   const {mutate: toggleMutate} = usePostToggleList()
   const {mutate} = usePostList()
 
-  const handleAddClick = () => {
-    mutate({title, content})
-    setContent('')
-  }
-
   useEffect(() => {
-    if(data && data.length >0){
-      const tasks: Todos[] = data[0]?.tasks.filter((t: Todos) => !t.isDeleted)
+    if(data && data.length > 0){
+      const title = data.find(item => item._id === titleId && !item.isDeleted)
+      const tasks: Todos[] = title?.tasks?.filter((t: Todos) => !t.isDeleted)
       setTodos(tasks)
     }
   },[data])
   
+  const handleAddClick = () => {
+    mutate({titleId, content})
+    setContent('')
+  }
 
   const handleAddTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value)
@@ -55,19 +56,19 @@ const PerPage = () => {
 
 
 
-  const toggleTodo = (text: string) => {
-    toggleMutate({title,content: text})
+  const toggleTodo = (contentId: string, text: string) => {
+    toggleMutate({titleId, contentId,content: text})
     setTodos(prev => prev.map((todo) => 
       todo.text === text ? {...todo, done: !todo.done} : todo
   ))
   }
 
-  const handleDelete = (text: string, e:React.MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = (contentId: string, e:React.MouseEvent<HTMLButtonElement>) => {
     // setTodos(prev => prev.filter(a => a.text !== text))
-    deleteMutate({title, content: text})
+    deleteMutate({titleId, contentId})
     e.stopPropagation()
   }
-//  hkjhkj
+
 
   return (
     <div className='relative h-full'>
@@ -93,8 +94,8 @@ const PerPage = () => {
             {todos?.filter(a => !a.done ).map((a, i) => (
               <FormControlLabel key={i}
                 control={<Checkbox
-                  checked={!todos.includes(a)}
-                  onChange={() => toggleTodo(a.text)}
+                  checked={a.done}
+                  onChange={() => toggleTodo(a._id, a.text)}
                 />}
                 label={a.text} 
                 />
@@ -110,11 +111,11 @@ const PerPage = () => {
           <div>
             {todos?.filter(a => a.done).map((a, i) => (
               <div className='flex items-center justify-between cursor-pointer' key={i}  >
-                <div className='flex items-center' onClick={()=>toggleTodo(a.text)}>
+                <div className='flex items-center' onClick={()=>toggleTodo(a._id,a.text)}>
                   <Checkbox checked />
                   <p className='line-through text-gray-500'>{a.text}</p>
                 </div>
-                <IconButton aria-label="delete"  onClick={(e)=>handleDelete(a.text, e)}>
+                <IconButton aria-label="delete"  onClick={(e)=>handleDelete(a._id, e)}>
                   <DeleteIcon sx={{ color: 'red' }} />
                 </IconButton>
               </div>

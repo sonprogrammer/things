@@ -19,7 +19,7 @@ export async function GET(req) {
 
     const todoTitles = await Todo.find({ 
         userId });
-
+        
     return NextResponse.json(
       { message: "success", todoTitles },
       { status: 200 }

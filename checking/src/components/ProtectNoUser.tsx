@@ -5,15 +5,28 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 export default function ProtectNoUser({children} : {children: React.ReactNode}){
-    const {userData } = useUserStore()
+    const {userData, setUserData } = useUserStore()
     const router = useRouter()
 
     useEffect(() => {
         if(!userData){
-            router.push('/')
-            alert('로그인을 해주세요')
+            const storedUser = localStorage.getItem('user')
+            if(storedUser){
+                try {
+                    const parsed = JSON.parse(storedUser)
+                    setUserData(parsed)
+                } catch (error) {
+                    console.error('error', error)
+                    localStorage.removeItem('user')
+                    router.push('/')
+                    alert('로그인을 다시 해주세요')
+                }
+            }else{
+                router.push('/')
+                alert('로그인을 해주세요')
+            }
         }
-    },[userData])
+    },[userData, setUserData])
     return (
         <>{children}</>
     )

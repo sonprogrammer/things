@@ -11,20 +11,22 @@ const MotionIconButton = motion(IconButton);
 
 
 interface PerPageProps{
+  id: string
   title: string
   onClick?: () => void
   edit: boolean
   handleDeleteClick: (title: string) => void
 }
 
-const PerPageBtn = ({title, onClick,edit, handleDeleteClick}: PerPageProps) => {
+const PerPageBtn = ({title, onClick,edit, handleDeleteClick, id}: PerPageProps) => {
+  
   return (
     <div className='hi relative'>
 
     {edit && title !== 'Add to cart' && ( 
       <IconButton onClick={(e) => {
         e.stopPropagation()
-        handleDeleteClick(title)
+        handleDeleteClick(id)
       }}
         className='!absolute top-[-18] left-[-18] z-1'
       >

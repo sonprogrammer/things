@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
 
-const deleteTitle = async(title: string) => {
-    const res = await axiosInstance.post('api/deleteTitle', {title})
+const deleteTitle = async(id: string) => {
+    const res = await axiosInstance.post('api/deleteTitle', {id})
     return res.data
 }
 

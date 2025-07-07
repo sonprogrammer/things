@@ -25,9 +25,8 @@ export default function Home() {
 
   const titles = data?.todoTitles || []
 
-  const dataWithAddBtn = [...titles, { title: 'Add to cart', isAddBtn: true }]
+  const dataWithAddBtn = [...titles, {_id: 'add-button', title: 'Add to cart', isAddBtn: true }]
 
-  console.log('data', dataWithAddBtn)
 
   const handleOutsideClick = () => {
     setOpenModal(false)
@@ -37,12 +36,12 @@ export default function Home() {
     setOpenModal(true)
   }
 
-  const handleDeleteClick = (title: string) => {
-    deleteTitle(title)
+  const handleDeleteClick = (id: string) => {
+    deleteTitle(id)
   }
 
-  const clickPage = (title: string) => {
-    router.push(`/page?title=${encodeURIComponent(title)}`)
+  const clickPage = (id: string, title: string) => {
+    router.push(`/page?id=${id}&title=${encodeURIComponent(title)}`)
   }
 
   return (
@@ -74,12 +73,14 @@ export default function Home() {
       
 
       <div className="grid sm:grid-cols-2 md:grid-cols-3 grid-cols-1  gap-5 text-center mt-10">
-        {dataWithAddBtn.filter(item => !item.isDeleted).map((item, i) => (
+        {dataWithAddBtn.filter(item => !item.isDeleted).map((item, i) => 
+          (
           <PerPageBtn title={item.title} edit={edit}
+            id={item._id}
             key={i}
             handleDeleteClick={handleDeleteClick}
             onClick={() =>
-              item.isAddBtn ? handleAddClick() : clickPage(item.title)
+              item.isAddBtn ? handleAddClick() : clickPage(item._id, item.title)
             } 
 
             />

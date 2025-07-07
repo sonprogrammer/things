@@ -2,8 +2,8 @@ import axiosInstance from "@/lib/axiosInstance"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
-const toggleList = async({title, content}: {title:string; content: string;}) => {
-    const res = await axiosInstance.post('api/postToggleList',{title, content})
+const toggleList = async({titleId, contentId, content}: {titleId:string;contentId:string; content: string;}) => {
+    const res = await axiosInstance.post('api/postToggleList',{titleId,contentId, content})
     return res.data
 }
 
@@ -12,7 +12,7 @@ const usePostToggleList = () => {
     return useMutation({
         mutationFn: toggleList,
         onSuccess: (data, variable) => {
-            queryClient.invalidateQueries({queryKey: ['todoLists', variable.title]})
+            queryClient.invalidateQueries({queryKey: ['todoLists', variable.contentId]})
         }
     })
 }

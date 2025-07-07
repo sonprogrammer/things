@@ -8,17 +8,17 @@ export async function POST(req){
     await mongodb()
 
     try {
-        const { title, content} = await req.json()
+        const { titleId, contentId} = await req.json()
 
         const userId = getUserFromReq(req)
 
-        const todoTitle = await Todo.findOne({title, userId})
+        const todoTitle = await Todo.findOne({_id: titleId, userId})
 
         if(!todoTitle){
             return NextResponse.json({message:'there is no title'}, {status:400})
         }
 
-        const tasks = todoTitle.tasks.find(t=> t.text === content)
+        const tasks = todoTitle.tasks.find(t=> t._id.toString() === contentId)
         tasks.isDeleted = true
 
         await todoTitle.save()

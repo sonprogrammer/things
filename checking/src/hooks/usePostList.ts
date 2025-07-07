@@ -2,8 +2,8 @@ import axiosInstance from "@/lib/axiosInstance"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
-const postList = async ({ title, content }: { title: string; content: string }) => {
-    const res = await axiosInstance.post('api/postList', {title, content})
+const postList = async ({ titleId, content }: { titleId: string; content: string }) => {
+    const res = await axiosInstance.post('api/postList', {titleId, content})
     return res.data
 }
 
@@ -13,7 +13,7 @@ const usePostList = () => {
     return useMutation({
         mutationFn: postList,
         onSuccess: (data,variable) => {
-            queryclient.invalidateQueries({queryKey: ['todoLists', variable.title]})
+            queryclient.invalidateQueries({queryKey: ['todoLists', variable.titleId]})
         }
     })
 }

@@ -7,17 +7,18 @@ export async function POST(req){
     await mongodb()
 
     try {
-        const { title, content} = await req.json()
+        const {  titleId, contentId, content} = await req.json()
         const userId = getUserFromReq(req)
 
-        const TodoTitle = await Todo.findOne({title, userId})
-        const todoTasks = TodoTitle.tasks
+        const TodoTitle = await Todo.findOne({_id:titleId, userId})
+        const task = TodoTitle.tasks.find(t => t._id.toString() === contentId);
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+          }
 
-        todoTasks.forEach(task => {
-            if(task.text === content){
-                task.done = !task.done
-            }
-        })
+          if (task.text === content) {
+            task.done = !task.done;
+          }
         await TodoTitle.save()
 
         return NextResponse.json({message: 'ok'} , {status: 200})
