@@ -21,6 +21,17 @@ interface Todos  {
   isDeleted?: boolean
 }
 
+interface TodoTitle {
+  _id: string
+  title: string
+  userId: string
+  tasks: Todos[]
+  isDeleted?: boolean
+  createdAt?: string
+  updatedAt?: string
+  __v?: number
+}
+
 
 const PerPage = () => {
   const [todos, setTodos] = useState<Todos[]>([])
@@ -38,11 +49,11 @@ const PerPage = () => {
 
   useEffect(() => {
     if(data && data.length > 0){
-      const title = data.find(item => item._id === titleId && !item.isDeleted)
+      const title = data.find((item:TodoTitle) => item._id === titleId && !item.isDeleted)
       const tasks: Todos[] = title?.tasks?.filter((t: Todos) => !t.isDeleted)
       setTodos(tasks)
     }
-  },[data])
+  },[data, titleId])
   
   const handleAddClick = () => {
     mutate({titleId, content})
