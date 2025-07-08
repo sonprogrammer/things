@@ -55,7 +55,7 @@ const LoginModal = () => {
     setLoading(true)
     try {
       // TODO api만들기 요청할것
-      const res = await axios.post(`pages/api/postCheckNickName`, {nickName})
+      const res = await axios.post(`api/postCheckNickName`, {nickName})
       if(res.data.available){
         setIsAvailable(true)
       }else{

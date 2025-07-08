@@ -1,8 +1,8 @@
-import Todo from "../../../lib/models/Todo";
+import Todo from "../../../../lib/models/Todo";
 import mongodb from '@/lib/mongodb'
 import { NextResponse } from 'next/server'
-import User from '../../../lib/models/User'
-import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
+import User from '../../../../lib/models/User'
+import { getUserFromReq } from "../../../../lib/serverUtil/getUserFromReq";
 
 
 

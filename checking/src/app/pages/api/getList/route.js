@@ -1,7 +1,7 @@
 import mongodb from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-import Todo from "../../../lib/models/Todo";
-import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
+import Todo from "../../../../lib/models/Todo";
+import { getUserFromReq } from "../../../../lib/serverUtil/getUserFromReq";
 
 
 
