@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/app/stores/useUserData';
 
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 
 const LoginModal = () => {
@@ -57,7 +58,7 @@ const LoginModal = () => {
     setLoading(true)
     try {
       // TODO api만들기 요청할것
-      const res = await axios.post('/api/postCheckNickName', {nickName})
+      const res = await axios.post(`api/postCheckNickName`, {nickName})
       if(res.data.available){
         setIsAvailable(true)
       }else{

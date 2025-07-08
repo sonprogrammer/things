@@ -1,5 +1,4 @@
 [build]
-  base = "checking"
   command = "npm run build"
   publish = ".next"
   functions = "netlify/functions"
