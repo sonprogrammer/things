@@ -3,6 +3,20 @@ import Todo from "../../../lib/models/Todo";
 import { NextResponse } from "next/server";
 import { getUserFromReq } from "../../../lib/serverUtil/getUserFromReq";
 
+
+const corsHeaders = {
+    "Access-Control-Allow-Origin": "https://things-tan.vercel.app", 
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Content-Type": "application/json",
+  };
+  
+  export async function OPTIONS() {
+    return new NextResponse(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  }
 export async function POST(req){
     await mongodb()
 
@@ -15,17 +29,17 @@ export async function POST(req){
         const todoTitle = await Todo.findOne({_id: id,userId})
 
         if(!todoTitle){
-            return NextResponse.json({message:'there is no title'}, {status: 400})
+            return NextResponse.json({message:'there is no title'}, {status: 400, headers:corsHeaders})
         }
 
         todoTitle.isDeleted = true
 
         await todoTitle.save()
 
-        return NextResponse.json({message:'ok'}, {status:200})
+        return NextResponse.json({message:'ok'}, {status:200, headers:corsHeaders})
         
     } catch (error) {
         console.log('error', error)
-        return NextResponse.json({message:'Nok'}, {status:500})
+        return NextResponse.json({message:'Nok'}, {status:500, headers:corsHeaders})
     }
 }
