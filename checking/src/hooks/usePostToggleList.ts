@@ -3,12 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-
-
-
 const toggleList = async({titleId, contentId, content}: {titleId:string;contentId:string; content: string;}) => {
-    const res = await axiosInstance.post(`${baseUrl}api/postToggleList`,{titleId,contentId, content})
+    const res = await axiosInstance.post(`api/postToggleList`,{titleId,contentId, content})
     return res.data
 }
 

@@ -2,11 +2,9 @@ import axiosInstance from "@/lib/axiosInstance"
 import { useQuery } from "@tanstack/react-query"
 
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-
 
 const getTitle = async () => {
-    const res = await axiosInstance.get(`${baseUrl}api/getTodoTitle`)
+    const res = await axiosInstance.get(`api/getTodoTitle`)
     return res.data
 }
 

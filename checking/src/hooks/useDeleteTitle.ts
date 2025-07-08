@@ -2,11 +2,9 @@ import axiosInstance from "@/lib/axiosInstance"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-
 
 const deleteTitle = async(id: string) => {
-    const res = await axiosInstance.post(`${baseUrl}api/deleteTitle`, {id})
+    const res = await axiosInstance.post(`api/deleteTitle`, {id})
     return res.data
 }
 
