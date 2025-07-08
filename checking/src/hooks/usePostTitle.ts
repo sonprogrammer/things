@@ -2,9 +2,10 @@ import {  useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from "@/lib/axiosInstance"
 
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 const postTitle = async(title: string) => {
-    const res = await axiosInstance.post('api/postTodoTitle',{title})
+    const res = await axiosInstance.post(`${baseUrl}api/postTodoTitle`,{title})
     return res.data
 }
 
