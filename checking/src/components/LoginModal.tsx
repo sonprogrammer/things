@@ -10,9 +10,6 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/app/stores/useUserData';
 
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-
-
 const LoginModal = () => {
   const [nickName, setNickName] = useState<string>('')
   const [gotoRegister, setGotoRegister] = useState<boolean>(false)
