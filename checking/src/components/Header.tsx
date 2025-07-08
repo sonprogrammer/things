@@ -12,7 +12,7 @@ import { useUserStore } from '@/app/stores/useUserData';
 // TODO 로그아웃 확인창 없이 진행
 const Header = () => {
   const { userData, setUserData} = useUserStore()
-  console.log('userdata', userData)
+  // console.log('userdata', userData)
   const router = useRouter()
 
   
