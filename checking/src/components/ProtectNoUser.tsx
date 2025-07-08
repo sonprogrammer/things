@@ -26,7 +26,7 @@ export default function ProtectNoUser({children} : {children: React.ReactNode}){
                 alert('로그인을 해주세요')
             }
         }
-    },[userData, setUserData])
+    },[userData, setUserData, router])
     return (
         <>{children}</>
     )

@@ -75,6 +75,7 @@ const LoginModal = () => {
 
     // TODO 아이디 디비에 있나 확인하는 요청 동안 로딩 상태 되게
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
       debouncedCheck(nickName)
       return() => {
@@ -94,6 +95,7 @@ const LoginModal = () => {
       }
       try {
         const res = await axios.post('api/postNewUser', {nickName})
+        console.log('res', res)
         alert('회원가입 성공')
         setNickName('')
         setIsAvailable(null)

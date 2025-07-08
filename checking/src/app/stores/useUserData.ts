@@ -1,8 +1,14 @@
 import { create } from 'zustand'
 
+interface UserData {
+    _id: string;
+    id: string;
+    __v: number;
+  }
+
 interface UserState {
-    userData: any
-    setUserData: (data: any) => void
+    userData: UserData | null
+    setUserData: (data: UserData | null) => void
 }
 
 export const useUserStore = create<UserState>((set) => ({

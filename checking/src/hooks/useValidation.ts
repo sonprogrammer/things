@@ -1,8 +1,5 @@
-
-import { useUserStore } from "@/app/stores/useUserData";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect } from "react";
 
 
 export const useValidation = (nickName: string) => {
