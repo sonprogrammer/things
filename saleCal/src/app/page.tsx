@@ -1,9 +1,12 @@
+import MainChart from "@/components/MainChart";
+import SubChart from "@/components/SubChart";
 
 
 export default function Home() {
   return (
     <div className=''>
-      Home
+      <MainChart />
+      <SubChart />
     </div>
   );
 }
