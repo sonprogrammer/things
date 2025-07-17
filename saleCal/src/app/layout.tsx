@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="w-full p-10 text-center text-xl">
+        <div className="w-full p-10 text-center text-xl bg-purple-300">
           <Header />
         </div>
         <div className="p-10 border-t-2">

@@ -1,12 +1,17 @@
 import MainChart from "@/components/MainChart";
-import SubChart from "@/components/SubChart";
+import TotalChart from "@/components/TotalChart";
+
 
 
 export default function Home() {
   return (
-    <div className=''>
+    <div className='flex flex-col w-full items-center justify-center h-full'>
+      <h1>판매가격 : </h1>
+      <div className="flex w-full justify-center">
+
       <MainChart />
-      <SubChart />
+      <TotalChart />
+      </div>
     </div>
   );
 }
