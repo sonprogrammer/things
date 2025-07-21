@@ -29,6 +29,16 @@ const etc = [
 
 const markets = Object.keys(feeTable)
 
+const costs = [
+  {'매입단가': 0},
+  {'배송비': 0},
+  {'매입운임비(개당)': 0},
+  {'판매자 부담 배송비': 0},
+  {'마켓팅비용': 0},
+  {'기타비용': 0},
+]
+
+
 const MainChart = () => {
   const [selectedMarket, setSelectedMarket] = useState<string>(markets[0])
 
