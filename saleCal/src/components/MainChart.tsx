@@ -1,6 +1,7 @@
 'use client'
 
 import PriceBtn from '@/components/PriceBtn'
+import { usePriceStore } from '@/store/usePriceStore';
 import { Button, FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material';
 import React, { useState } from 'react'
@@ -29,21 +30,59 @@ const etc = [
 
 const markets = Object.keys(feeTable)
 
-const costs = [
-  {'매입단가': 0},
-  {'배송비': 0},
-  {'매입운임비(개당)': 0},
-  {'판매자 부담 배송비': 0},
-  {'마켓팅비용': 0},
-  {'기타비용': 0},
-]
 
+const profitRates = ['5%', '10%', '15%', '20%', '25%', '30%', '35%']
 
 const MainChart = () => {
   const [selectedMarket, setSelectedMarket] = useState<string>(markets[0])
+  const [costs, setCosts] = useState<Record<string, number>>({
+    '매입단가': 0,
+    '배송비': 0,
+    '매입운임비(개당)' : 0,
+    '판매자 부담 배송비' : 0,
+    '마켓팅비용' : 0,
+    '기타비용' : 0
+  })
+  const [profit, setProfit] = useState<string>('5%')
+  const [totalPrice, setTotalPrice] = useState<number>(0)
+
+  const setTotal = usePriceStore((state) => state.setTotalPrice)
+
+  setTotal(totalPrice)
 
   const handleChange = (e: SelectChangeEvent) => {
     setSelectedMarket(e.target.value as string)
+  }
+
+  const handleCalculate = () => {
+    const totalCost =
+      costs['매입단가'] +
+      costs['배송비'] +
+      costs['매입운임비(개당)'] +
+      costs['판매자 부담 배송비'] +
+      costs['마켓팅비용'] +
+      costs['기타비용']
+  
+    const fee = feeTable[selectedMarket]
+    const marketFeeRate = (fee.기본 + fee.연동 + fee.배송비) / 100
+  
+    const marginRate = parseFloat(profit.replace('%', '')) / 100
+  
+    const salePrice = totalCost / (1 - marginRate - marketFeeRate)
+  
+    setTotalPrice(Math.round(salePrice))
+  }
+
+  const handleReset = () => {
+    setCosts({
+      '매입단가': 0,
+      '배송비': 0,
+      '매입운임비(개당)': 0,
+      '판매자 부담 배송비': 0,
+      '마켓팅비용': 0,
+      '기타비용': 0,
+    })
+    setTotalPrice(0)
   }
 
   return (
@@ -54,7 +93,10 @@ const MainChart = () => {
           {labels.map(label => (
             <div key={label}>
               <h1>{label}</h1>
-              <PriceBtn />
+              <PriceBtn 
+                value={costs[label]}
+                onChange={(val) => setCosts(prev=> ({...prev, [label]: val}))}
+              />
             </div>
           ))}
         </div>
@@ -93,11 +135,15 @@ const MainChart = () => {
               </div>
             ))}
           </div>
-          <div className='grid grid-cols-2 gap-4 mt-5 비용'>
+
+          <div className='grid grid-cols-2 gap-4 mt-5 기타비용'>
             {etc.map(c => (
               <div key={c}>
                 <h1>{c}</h1>
-                <PriceBtn />
+                <PriceBtn 
+                  value={costs[c]}
+                  onChange={(val) => setCosts(prev => ({...prev, [c]: val}))}
+                />
               </div>
             ))}
           </div>
@@ -105,9 +151,27 @@ const MainChart = () => {
 
       </div>
 
+      <div className='마진율 선택'>
+          <FormControl sx={{m: 1, width: '50%'}}>
+            <InputLabel id="demo-multiple-name-label">마진율</InputLabel>
+            <Select
+              labelId='demo-multiple-name-label'
+              id='demo-multiple-name'
+              value={profit}
+              onChange={(e) => setProfit(e.target.value)}
+            >
+              {profitRates.map(rate => (
+                <MenuItem key={rate} value={rate}>
+                  {rate}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+      </div>
+
       <div className='맨밑에 계산하기 버튼 flex justify-end w-full gap-5 mt-3'>
-        <Button color="inherit" sx={{color: 'gray'}}>초기화</Button>
-        <Button variant="contained" color="primary" sx={{borderRadius: '20px'}}>
+        <Button color="inherit" sx={{color: 'gray'}} onClick={handleReset}>초기화</Button>
+        <Button onClick={handleCalculate} variant="contained" color="primary" sx={{borderRadius: '20px'}}>
           계산하기
         </Button>
       </div>
