@@ -68,7 +68,7 @@ const Header = () => {
 
       <AnimatePresence>
 
-    {!isScrolled && 
+    {/* {!isScrolled && 
 
     <motion.div
     className={`여행지 선택 flex bg-amber-200 justify-center items-center p-5`}
@@ -108,7 +108,7 @@ const Header = () => {
         </div>
       </motion.div>
 
-      }
+      } */}
             </AnimatePresence>
     </div>
   );
