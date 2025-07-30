@@ -33,3 +33,32 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-200px * 6));
+  }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+
+.mySwiper {
+  transition-timing-function: linear;
+  background-color: aqua;
+}
+
+.swiper-wrapper{
+  transition-timing-function: linear !important;
+  column-gap: 30px;
+}
+
+.swiper-slide:hover{
+  transform: translateY(30px);
+  transition: transform 0.3s;
+}
